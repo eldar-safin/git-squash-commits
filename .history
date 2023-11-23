@@ -1,0 +1,5 @@
+echo "LOG_LEVEL=INFO" > .env.example
+echo "LOG_LEVEL=DEBUG" > .env
+echo .env > .gitignore
+cat <<"END" > main.py\n#!/usr/bin/env python3\n\nimport sys\n\n\ndef main():\n    return 0\n\nif __name__ == "__main__":\n    sys.exit(main())\n\nEND
+chmod +x main.py
