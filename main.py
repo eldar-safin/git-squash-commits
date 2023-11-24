@@ -2,9 +2,10 @@
 
 import logging
 import os
-import requests
 import sys
 from typing import List
+
+import requests
 
 from settings import settings
 
@@ -12,31 +13,43 @@ from settings import settings
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 logging.basicConfig(
-    format='%(asctime)s | %(filename)16s:%(lineno)-4d | %(levelname)-8s | %(message)s',
-    level=logging._nameToLevel[settings.log.level]
+    format="%(asctime)s | %(filename)16s:%(lineno)-4d | %(levelname)-8s | %(message)s",
+    level=logging._nameToLevel[settings.log.level],
 )
 
 urls_list: List[str] = list(
-    map(lambda line: line.strip(), open(settings.urls.filename).readlines()))
+    map(
+        lambda line: line.strip(),
+        open(settings.urls.filename).readlines(),
+    )
+)
 
 
 def main() -> int:
     for url_item in urls_list:
-        logging.info(f'Check {url_item}')
+        logging.info(f"Check {url_item}")
 
-        def check_url(url: str) -> bool:
+        def check_url(
+            url: str,
+        ) -> bool:
             try:
-                response: requests.Response = requests.get(url, timeout=3)
+                response: requests.Response = requests.get(
+                    url,
+                    timeout=3,
+                )
                 return response.status_code == 200
-            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError):
+            except (
+                requests.exceptions.ReadTimeout,
+                requests.exceptions.ConnectionError,
+            ):
                 return False
 
         if check_url(url_item):
-            logging.info('Success')
+            logging.info("Success")
         else:
-            logging.error('Failed')
+            logging.error("Failed")
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
